@@ -30,7 +30,7 @@ const mapSrc = mapsKey
 const faqItems = [
   {
     question: `How much does ${service.data.title.toLowerCase()} cost?`,
-    answer: `Pricing depends on the scope of the job and your specific needs. We provide free, no-obligation estimates — call us at ${business.phone} or fill out the form below for a fast quote.`,
+    answer: `Pricing depends on the scope of the job and your specific needs. We provide free, no-obligation estimates, call us at ${business.phone} or fill out the form below for a fast quote.`,
   },
   {
     question: "Do you serve my area?",
@@ -38,11 +38,11 @@ const faqItems = [
   },
   {
     question: `Is ${service.data.title.toLowerCase()} available as a one-time service?`,
-    answer: "Yes — we offer both one-time and recurring options. Let us know what you're looking for when you request a quote.",
+    answer: "Yes, we offer both one-time and recurring options. Let us know what you're looking for when you request a quote.",
   },
   {
     question: "How quickly can I schedule service?",
-    answer: `We typically schedule within 1–3 business days. For urgent needs, call us at ${business.phone} and we'll do our best to accommodate you sooner.`,
+    answer: `We typically schedule within 1-3 business days. For urgent needs, call us at ${business.phone} and we'll do our best to accommodate you sooner.`,
   },
   {
     question: "Is your work guaranteed?",
@@ -129,7 +129,7 @@ const faqItems = [
             </h2>
             <div class="rounded-2xl overflow-hidden border border-neutral-200 shadow-sm">
               <iframe
-                title={`${business.name} — ${service.data.title} service area`}
+                title={`${business.name}, ${service.data.title} service area`}
                 src={mapSrc}
                 width="100%"
                 height="360"

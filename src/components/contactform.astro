@@ -54,7 +54,7 @@ const webhookUrl = import.meta.env.PUBLIC_GHL_WEBHOOK_URL ?? "";
         {business.primaryServices.map((s) => (
           <option value={s}>{s}</option>
         ))}
-        <option value="Not sure">Not sure — need advice</option>
+        <option value="Not sure">Not sure, need advice</option>
       </select>
     </div>
 
@@ -70,7 +70,7 @@ const webhookUrl = import.meta.env.PUBLIC_GHL_WEBHOOK_URL ?? "";
       ></textarea>
     </div>
 
-    <input type="hidden" name="source" value="Website — Contact Form" />
+    <input type="hidden" name="source" value="Website, Contact Form" />
 
     <button
       type="submit"

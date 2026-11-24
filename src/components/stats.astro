@@ -30,21 +30,18 @@ const stats = [
 ];
 ---
 
-<section class="bg-primary-900 text-white py-20 lg:py-24">
+<section class="relative isolate overflow-hidden bg-primary-900 text-white py-16 lg:py-20">
+  <div class="hero-glow absolute inset-0 -z-10 opacity-60"></div>
   <div class="max-w-(--breakpoint-xl) mx-auto px-5">
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
+    <dl class="grid grid-cols-2 lg:grid-cols-4 gap-y-10 lg:divide-x lg:divide-white/15">
       {stats.map((stat, i) => (
-        <div class="group flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay={(i + 1) * 100}>
-          <div class="text-accent-400 mb-3 opacity-80"><Icon name={stat.icon} class="w-7 h-7" /></div>
-          <div class="font-heading font-bold text-5xl lg:text-6xl text-white">
-            <span
-              data-counter={stat.value}
-              data-suffix={stat.suffix}
-            >0{stat.suffix}</span>
-          </div>
-          <div class="text-white/60 text-sm font-medium mt-2 uppercase tracking-wide">{stat.label}</div>
+        <div class="group flex flex-col px-2 lg:px-10 lg:first:pl-0" data-aos="fade-up" data-aos-delay={(i + 1) * 80}>
+          <dt class="text-white/70 text-sm font-medium mt-3 flex items-center gap-2"><Icon name={stat.icon} class="w-4 h-4 text-accent-400" />{stat.label}</dt>
+                  <dd class="order-first font-heading font-extrabold text-5xl lg:text-6xl text-white leading-none">
+            <span data-counter={stat.value} data-suffix={stat.suffix}>0{stat.suffix}</span>
+          </dd>
         </div>
       ))}
-    </div>
+    </dl>
   </div>
 </section>

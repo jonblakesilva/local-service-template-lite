@@ -15,7 +15,7 @@ import { business } from "@/config/business";
           Project Timeline Estimator
         </h1>
         <p class="text-white/70 text-lg mt-4">
-          Estimate how long your project will take based on job type and size. Actual timelines vary — call for a firm schedule.
+          Estimate how long your project will take based on job type and size. Actual timelines vary, call for a firm schedule.
         </p>
       </div>
     </div>
@@ -37,7 +37,7 @@ import { business } from "@/config/business";
               </label>
               <select id="jobType" class="w-full border border-neutral-300 rounded-lg px-4 py-3 text-neutral-900 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 focus:outline-none bg-white text-sm">
                 <option value="small">Small job (single tree / simple task)</option>
-                <option value="medium" selected>Medium job (2–4 trees / multi-area)</option>
+                <option value="medium" selected>Medium job (2-4 trees / multi-area)</option>
                 <option value="large">Large job (5+ trees / full property)</option>
                 <option value="emergency">Emergency / storm response</option>
               </select>
@@ -57,7 +57,7 @@ import { business } from "@/config/business";
             <!-- Output -->
             <div class="bg-neutral-50 rounded-xl p-6 border border-neutral-200">
               <p class="text-sm text-neutral-500 mb-1">Estimated job duration</p>
-              <p id="durationOutput" class="font-heading font-bold text-4xl text-primary-900">2–4 hours</p>
+              <p id="durationOutput" class="font-heading font-bold text-4xl text-primary-900">2-4 hours</p>
               <p id="crewOutput" class="text-neutral-500 text-sm mt-2">Typical crew: 3 people</p>
               <p class="text-xs text-neutral-400 mt-2">
                 Actual time depends on site conditions, equipment access, and specific requirements.
@@ -87,7 +87,7 @@ import { business } from "@/config/business";
 
           <div class="space-y-4">
             {[
-              { title: "We show up on time", desc: "Your scheduled window is the time we arrive — not a 4-hour range." },
+              { title: "We show up on time", desc: "Your scheduled window is the time we arrive, not a 4-hour range." },
               { title: "One visit, done right", desc: "We bring the right crew and equipment to finish the job in a single visit whenever possible." },
               { title: "Site left clean", desc: "Cleanup is included. We don't leave until the property is spotless." },
             ].map((item) => (
@@ -110,7 +110,7 @@ import { business } from "@/config/business";
             <a href={`tel:${business.phoneRaw}`} class="text-accent-300 hover:text-accent-200 font-bold text-xl transition-colors">
               {business.phone}
             </a>
-            <p class="text-white/50 text-xs mt-1">Mon–Sat 7am–7pm</p>
+            <p class="text-white/50 text-xs mt-1">Mon-Sat 7am-7pm</p>
           </div>
         </div>
 
@@ -126,24 +126,24 @@ import { business } from "@/config/business";
 
   const DURATIONS: Record<JobType, Record<PropertyType, { time: string; crew: string }>> = {
     small: {
-      residential: { time: "1–2 hours",  crew: "2 people" },
-      commercial:  { time: "2–3 hours",  crew: "2–3 people" },
-      rural:       { time: "2–4 hours",  crew: "2–3 people" },
+      residential: { time: "1-2 hours",  crew: "2 people" },
+      commercial:  { time: "2-3 hours",  crew: "2-3 people" },
+      rural:       { time: "2-4 hours",  crew: "2-3 people" },
     },
     medium: {
-      residential: { time: "3–5 hours",  crew: "3 people" },
-      commercial:  { time: "4–6 hours",  crew: "3–4 people" },
-      rural:       { time: "4–8 hours",  crew: "3–4 people" },
+      residential: { time: "3-5 hours",  crew: "3 people" },
+      commercial:  { time: "4-6 hours",  crew: "3-4 people" },
+      rural:       { time: "4-8 hours",  crew: "3-4 people" },
     },
     large: {
-      residential: { time: "1–2 days",   crew: "4–5 people" },
-      commercial:  { time: "2–3 days",   crew: "4–5 people" },
-      rural:       { time: "2–4 days",   crew: "4–6 people" },
+      residential: { time: "1-2 days",   crew: "4-5 people" },
+      commercial:  { time: "2-3 days",   crew: "4-5 people" },
+      rural:       { time: "2-4 days",   crew: "4-6 people" },
     },
     emergency: {
-      residential: { time: "2–4 hours",  crew: "3–4 people" },
-      commercial:  { time: "2–5 hours",  crew: "3–5 people" },
-      rural:       { time: "3–6 hours",  crew: "3–5 people" },
+      residential: { time: "2-4 hours",  crew: "3-4 people" },
+      commercial:  { time: "2-5 hours",  crew: "3-5 people" },
+      rural:       { time: "3-6 hours",  crew: "3-5 people" },
     },
   };
 

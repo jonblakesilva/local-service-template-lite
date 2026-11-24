@@ -1,92 +1,83 @@
 ---
 import { business } from "@/config/business";
 import { web3formsReady, formProvider } from "@/config/forms";
+import { Icon } from "astro-icon/components";
 import Web3Form from "@/components/web3form.astro";
 
-// GHL webhook URL — set PUBLIC_GHL_WEBHOOK_URL in your .env or Cloudflare env vars.
+// GHL webhook URL, set PUBLIC_GHL_WEBHOOK_URL in your .env or Cloudflare env vars.
 // If not set, the form renders a "call us" fallback instead of submitting.
 // With formProvider "web3forms" (src/config/forms.ts) this form emails you instead.
 const useWeb3 = formProvider === "web3forms" && web3formsReady;
 const webhookUrl = formProvider === "embed" ? (import.meta.env.PUBLIC_GHL_WEBHOOK_URL ?? "") : "";
 ---
 
-<section class="bg-primary-900 text-white overflow-hidden">
-  <div class="max-w-(--breakpoint-xl) mx-auto px-5 py-16 lg:py-24">
-    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+<section class="relative isolate overflow-hidden bg-primary-900 text-white">
+  {business.heroImage && (
+    <img
+      src={business.heroImage}
+      alt={business.heroImageAlt}
+      width="1600"
+      height="1000"
+      fetchpriority="high"
+      decoding="async"
+      class="absolute inset-0 -z-20 h-full w-full object-cover"
+    />
+  )}
+  <!-- Color wash keeps the headline readable over a photo, and gives a plain background some depth. -->
+  <div
+    class:list={["absolute inset-0 -z-10", !business.heroImage && "hero-glow"]}
+    style={business.heroImage ? "background:linear-gradient(100deg,var(--color-primary-900) 8%,color-mix(in srgb,var(--color-primary-900) 82%,transparent) 48%,color-mix(in srgb,var(--color-primary-900) 40%,transparent) 100%)" : undefined}
+  ></div>
+
+  <div class="max-w-(--breakpoint-xl) mx-auto px-5 pt-14 pb-28 lg:pt-20 lg:pb-36">
+    <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
 
       <!-- Left: Headline + CTAs -->
       <div>
-        <!-- Trust badge -->
-        <div class="hero-1 inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-medium px-4 py-2 rounded-full mb-6">
-          <span class="flex">
-            {"★★★★★".split("").map(() => (
-              <span class="text-accent-400 text-xs">★</span>
-            ))}
-          </span>
-          <span>Rated {business.rating}/5 · {business.reviewCount}+ Reviews</span>
+        <div class="hero-1 inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-medium pl-3 pr-4 py-1.5 rounded-full mb-6 backdrop-blur-sm">
+          <span class="text-accent-400 text-xs tracking-wider" aria-hidden="true">★★★★★</span>
+          <span>Rated {business.rating}/5 by {business.reviewCount}+ customers</span>
         </div>
 
-        <h1 class="hero-2 font-heading text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
-          Expert {business.niche} in {business.city}.
-          <span class="text-accent-400"> Done Right.</span>
+        <h1 class="hero-2 font-heading text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold leading-[1.04] tracking-tight text-white">
+          Expert {business.niche} in {business.city}.{" "}
+          <span class="text-accent-400">Done right.</span>
         </h1>
 
-        <p class="hero-3 text-lg text-white/75 mt-5 max-w-lg leading-relaxed">
+        <p class="hero-3 text-lg text-white/80 mt-5 max-w-lg leading-relaxed">
           {business.tagline} Serving {business.city}, {business.state} and a {business.serviceRadius}.
         </p>
 
-        <!-- Primary CTAs -->
-        <div class="hero-4 mt-8 flex flex-col sm:flex-row gap-4">
+        <!-- One main action (call) plus a way down to the form. -->
+        <div class="hero-4 mt-8 flex flex-col sm:flex-row gap-3">
           <a
             href={`tel:${business.phoneRaw}`}
-            class="inline-flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-600 text-white font-bold text-lg px-8 py-4 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+            class="inline-flex items-center justify-center gap-2.5 bg-accent-500 hover:bg-accent-600 text-white font-bold text-lg px-8 h-14 rounded-xl transition-all duration-200 shadow-lg shadow-black/20 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.5 11.5 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.5 11.5 0 00.57 3.6 1 1 0 01-.24 1.01l-2.21 2.18z"/>
-            </svg>
+            <Icon name="lucide:phone" class="w-5 h-5 shrink-0" />
             Call {business.phone}
           </a>
           <a
-            href="/contact"
-            class="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-lg px-8 py-4 rounded-xl transition-all duration-200"
+            href="#hero-quote"
+            class="inline-flex items-center justify-center gap-2 text-white font-semibold text-lg px-6 h-14 rounded-xl border border-white/30 hover:bg-white/10 transition-colors"
           >
-            Get Free Quote
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
+            Get a free quote
+            <Icon name="lucide:arrow-down" class="w-5 h-5" />
           </a>
-        </div>
-
-        <!-- Trust signals row -->
-        <div class="hero-5 mt-10 flex flex-wrap gap-x-6 gap-y-2">
-          {[
-            "Licensed & Insured",
-            "Free Estimates",
-            business.guaranteeText,
-          ].map((item) => (
-            <span class="flex items-center gap-1.5 text-sm text-white/70">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-accent-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-              </svg>
-              {item}
-            </span>
-          ))}
         </div>
       </div>
 
       <!-- Right: Quote form -->
-      <div class="hero-card">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 text-neutral-900">
-          <div class="flex items-center gap-2 mb-6">
-            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span class="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Request a Free Quote</span>
-          </div>
+      <div class="hero-card" id="hero-quote">
+        <div class="bg-white rounded-2xl shadow-2xl shadow-black/30 ring-1 ring-black/5 p-7 sm:p-8 text-neutral-900">
+          <h2 class="font-heading text-2xl font-bold text-primary-900">Get your free quote</h2>
+          <p class="text-sm text-neutral-600 mt-1 mb-6">Takes 30 seconds. No obligation. We reply the same business day.</p>
 
           {useWeb3 ? (
             <Web3Form variant="quote" />
           ) : webhookUrl ? (
             <form id="hero-form" class="space-y-4" novalidate>
-              <input type="hidden" name="source" value="Website — Hero Form" />
+              <input type="hidden" name="source" value="Website, Hero Form" />
 
               <div>
                 <label for="hero-name" class="block text-sm font-medium text-neutral-700 mb-1.5">Your Name</label>
@@ -124,7 +115,7 @@ const webhookUrl = formProvider === "embed" ? (import.meta.env.PUBLIC_GHL_WEBHOO
                   {business.primaryServices.map((s) => (
                     <option value={s}>{s}</option>
                   ))}
-                  <option value="Not sure">Not sure — need advice</option>
+                  <option value="Not sure">Not sure, need advice</option>
                 </select>
               </div>
 
@@ -158,13 +149,6 @@ const webhookUrl = formProvider === "embed" ? (import.meta.env.PUBLIC_GHL_WEBHOO
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Decorative bottom wave -->
-  <div class="text-white">
-    <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" class="block w-full" preserveAspectRatio="none">
-      <path fill="#ffffff" d="M0,20 C360,40 1080,0 1440,20 L1440,40 L0,40 Z"/>
-    </svg>
   </div>
 </section>
 

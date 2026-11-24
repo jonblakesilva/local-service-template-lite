@@ -1,18 +1,18 @@
 // ─── Business Configuration ───────────────────────────────────────────────────
 // Update this file once per client site. Every page, schema, and component
-// reads from here — you should not need to change business details anywhere else.
+// reads from here, you should not need to change business details anywhere else.
 
 export const business = {
   // ── Identity ──
   name: "Your Business Name",
-  tagline: "Professional service you can count on — done right the first time.",
+  tagline: "Professional service you can count on, done right the first time.",
   niche: "Home Services",          // e.g. "HVAC", "Roofing", "Plumbing", "Lawn Care"
   yearFounded: 2010,               // used in "X years in business" stats
   licenseNumber: "LIC-000000",     // show on About / footer (set "" to hide)
 
   // ── Contact ──
   phone: "(555) 555-5555",
-  phoneRaw: "5555555555",          // digits only — used in tel: links
+  phoneRaw: "5555555555",          // digits only, used in tel: links
   // Optional. If `phone` above is a call-tracking number (for example a rented-site or ad number),
   // put the business's REAL main line here. Search engines (the LocalBusiness data) will use it, so it
   // matches the Google Business Profile. Leave "" to use `phone`. Format it the same way as `phone`.
@@ -31,7 +31,7 @@ export const business = {
   state: "ST",
   zip: "00000",
   serviceRadius: "30 mile radius", // e.g. "50 miles", "metro area"
-  lat: 41.6638,   // city center coordinates for map embeds — update per client
+  lat: 41.6638,   // city center coordinates for map embeds, update per client
   lng: -83.5552,
 
   // ── Google ──
@@ -43,6 +43,12 @@ export const business = {
   // Optional: your Google Maps listing link (Google Maps > your business > Share > copy link).
   // Added to the search-engine data so Google can connect this site to your listing. "" to skip.
   googleMapsUrl: "",
+
+  // ── Hero photo (optional) ──
+  // A wide photo of your work for the top of the home page, saved in public/images/ (WebP, about 1600px wide).
+  // Leave "" to use the clean color background. heroImageAlt describes the photo: subject, service, city.
+  heroImage: "",
+  heroImageAlt: "",
 
   // ── Review link ──
   // reviewUrl: your direct Google review link (Google Business Profile > "Ask for reviews" > copy link).
@@ -76,7 +82,7 @@ export const business = {
   },
 
   // ── Services (short list for footer quick-links) ──
-  // Full service pages live in src/content/services/ — this is just for the footer.
+  // Full service pages live in src/content/services/, this is just for the footer.
   primaryServices: [
     "Service One",
     "Service Two",

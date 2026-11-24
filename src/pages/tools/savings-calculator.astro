@@ -110,7 +110,7 @@ import { business } from "@/config/business";
             <p class="text-neutral-600 leading-relaxed text-sm">
               <!-- CUSTOMIZE: Adapt this explanation for your niche. -->
               Emergency and reactive service calls are always more expensive than planned maintenance.
-              When problems build up — overgrown trees, deferred trimming, ignored hazards — the cost
+              When problems build up, overgrown trees, deferred trimming, ignored hazards, the cost
               of fixing them is significantly higher than the cost of preventing them.
               Regular scheduled service also gets you priority scheduling and lower per-visit rates.
             </p>
@@ -142,7 +142,7 @@ import { business } from "@/config/business";
             <a href={`tel:${business.phoneRaw}`} class="text-accent-300 hover:text-accent-200 font-bold text-xl transition-colors">
               {business.phone}
             </a>
-            <p class="text-white/50 text-xs mt-1">Mon–Sat 7am–7pm</p>
+            <p class="text-white/50 text-xs mt-1">Mon-Sat 7am-7pm</p>
           </div>
         </div>
 
@@ -186,7 +186,7 @@ import { business } from "@/config/business";
     savingsOutputEl.textContent = fmt(savings);
     savingsPctEl.textContent    = savings > 0
       ? `${pct}% less than reactive calls`
-      : "Similar cost — but you get priority scheduling and prevention";
+      : "Similar cost, but you get priority scheduling and prevention";
   }
 
   reactiveVisitsEl.addEventListener("input", calculate);

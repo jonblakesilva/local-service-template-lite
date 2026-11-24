@@ -40,7 +40,8 @@ The owner may not be technical. Explain what you changed in plain English.
 
 - Service pages: optional `image: { src: "/images/x.webp", alt: "..." }` in the frontmatter.
 - Blog posts: `image.src` must be a local `/images/*.webp` path, not an external URL. Hero images about 1200px wide.
-- Before/after section (`src/components/beforeafter.astro`): set `before` / `after` to `/images/*.webp` paths, or leave `""` for the gradient placeholder.
+- "Recent work" section (`src/components/beforeafter.astro`): set `after` (and `before` for a split card) to `/images/*.webp` paths. With no photos the section is left out.
+- Home hero photo: `heroImage` / `heroImageAlt` in `business.ts` (WebP in `public/images/`). Leave `""` for the plain color background.
 
 ## Astro docs
 

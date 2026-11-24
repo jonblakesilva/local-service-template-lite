@@ -2,7 +2,7 @@
 import { business } from "@/config/business";
 ---
 
-<!-- Sticky mobile call bar — hidden on desktop, slides up after 20% scroll on mobile -->
+<!-- Sticky mobile call bar, hidden on desktop, slides up after 20% scroll on mobile -->
 <div
   id="mobile-call-bar"
   class="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white border-t-2 border-neutral-200 shadow-[0_-4px_20px_rgb(0,0,0/0.12)] translate-y-full transition-transform duration-300"
@@ -47,7 +47,7 @@ import { business } from "@/config/business";
   <div class="h-safe-area-inset-bottom bg-white"></div>
 </div>
 
-<!-- Spacer — keeps content from being clipped once bar is visible -->
+<!-- Spacer, keeps content from being clipped once bar is visible -->
 <div id="mobile-call-bar-spacer" class="lg:hidden h-14 opacity-0 pointer-events-none"></div>
 
 <script is:inline>

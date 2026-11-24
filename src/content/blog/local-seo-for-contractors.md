@@ -1,7 +1,7 @@
 ---
 draft: false
 title: "Local SEO for Contractors: How to Rank in Your City"
-snippet: "Most contractor websites are invisible online. Here's what actually moves the needle for local search rankings — no jargon, no fluff."
+snippet: "Most contractor websites are invisible online. Here's what actually moves the needle for local search rankings, no jargon, no fluff."
 image: {
     src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?&fit=crop&w=430&h=240",
     alt: "contractor checking Google rankings on laptop"
@@ -16,7 +16,7 @@ If your contracting business doesn't show up when someone searches "[your servic
 
 ## What Local SEO Actually Is
 
-Local SEO is the process of making your business appear in Google's local results — the map pack and organic listings — when people in your service area search for what you do. It's different from general SEO because the signals are tied to location and proximity, not just content.
+Local SEO is the process of making your business appear in Google's local results, the map pack and organic listings, when people in your service area search for what you do. It's different from general SEO because the signals are tied to location and proximity, not just content.
 
 ## Google Business Profile: Your Most Important Asset
 
@@ -40,14 +40,14 @@ Audit your listings on Yelp, Angi, BBB, Facebook, and any industry directories. 
 
 A Google Business Profile without a website is leaving rankings on the table. Your website needs:
 
-- **Separate pages for each service** — "Roof Replacement" and "Roof Repair" should be different pages, not one page
-- **Separate pages for each city** — a page for each city in your service area with locally relevant content
-- **Schema markup** — structured data that tells Google you're a LocalBusiness with specific services (this template includes it out of the box)
-- **Fast load time** — Google measures Core Web Vitals; a slow site hurts rankings
+- **Separate pages for each service**, "Roof Replacement" and "Roof Repair" should be different pages, not one page
+- **Separate pages for each city**, a page for each city in your service area with locally relevant content
+- **Schema markup**, structured data that tells Google you're a LocalBusiness with specific services (this template includes it out of the box)
+- **Fast load time**, Google measures Core Web Vitals; a slow site hurts rankings
 
 ## Reviews Are a Ranking Signal
 
-The more high-quality reviews you have — and the more recently you received them — the better you'll rank in the local pack. Aim for a consistent flow of reviews, not a one-time burst.
+The more high-quality reviews you have, and the more recently you received them, the better you'll rank in the local pack. Aim for a consistent flow of reviews, not a one-time burst.
 
 Respond to every review. It signals to Google that your business is active.
 
@@ -57,7 +57,7 @@ Links from other local websites tell Google you're established in your community
 
 ## How Long Does It Take?
 
-Honest answer: 3 to 6 months to see meaningful movement for competitive keywords; faster for less competitive niches and smaller markets. Local SEO compounds over time — the businesses that started 2 years ago have a big head start, but you can close the gap with consistent effort.
+Honest answer: 3 to 6 months to see meaningful movement for competitive keywords; faster for less competitive niches and smaller markets. Local SEO compounds over time, the businesses that started 2 years ago have a big head start, but you can close the gap with consistent effort.
 
 ---
 

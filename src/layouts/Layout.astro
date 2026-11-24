@@ -7,6 +7,7 @@ import MobileCallBar from "@/components/mobilecallbar.astro";
 import Navbar from "@/components/navbar/navbar.astro";
 import OrganizationSchema from "@/components/organizationschema.astro";
 import { business } from "@/config/business";
+import "@fontsource-variable/bricolage-grotesque/index.css";
 import "@fontsource-variable/inter/index.css";
 import "@fontsource-variable/outfit/index.css";
 import "../styles/global.css";
@@ -26,7 +27,7 @@ const { title, description, noindex = false, minimal = false } = Astro.props;
 
 const makeTitle = title
   ? `${title} | ${business.name}`
-  : `${business.name} — ${business.niche} in ${business.city}, ${business.state}`;
+  : `${business.name}: ${business.niche} in ${business.city}, ${business.state}`;
 
 const makeDescription =
   description ??
@@ -79,7 +80,7 @@ const makeDescription =
         }
       </script>
     )}
-    <!-- Cloudflare Web Analytics — set CF_ANALYTICS_TOKEN in your environment variables -->
+    <!-- Cloudflare Web Analytics, set CF_ANALYTICS_TOKEN in your environment variables -->
     {import.meta.env.CF_ANALYTICS_TOKEN && (
       <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={`{"token": "${import.meta.env.CF_ANALYTICS_TOKEN}"}`}></script>
     )}
