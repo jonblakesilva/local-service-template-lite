@@ -1,0 +1,48 @@
+---
+import { business } from "@/config/business";
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, "") ?? "";
+const id = `${siteUrl}/#business`;
+
+const sameAs = Object.values(business.socials).filter(Boolean) as string[];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": id,
+  name: business.name,
+  description: business.tagline,
+  url: siteUrl,
+  telephone: business.schemaPhone || business.phone,
+  email: business.email,
+  foundingDate: String(business.yearFounded),
+  priceRange: business.priceRange,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: business.city,
+    addressRegion: business.state,
+    postalCode: business.zip,
+    addressCountry: "US",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: business.lat,
+    longitude: business.lng,
+  },
+  areaServed: `${business.city}, ${business.state} (${business.serviceRadius})`,
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: String(business.rating),
+    reviewCount: String(business.reviewCount),
+    bestRating: "5",
+    worstRating: "1",
+  },
+  ...(business.hours.length > 0 && {
+    openingHours: business.hours,
+  }),
+  ...(business.googleMapsUrl && { hasMap: business.googleMapsUrl }),
+  ...(sameAs.length > 0 && { sameAs }),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

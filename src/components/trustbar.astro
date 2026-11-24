@@ -1,0 +1,43 @@
+---
+import { Icon } from "astro-icon/components";
+import { business } from "@/config/business";
+
+const items = [
+  {
+    icon: "lucide:star",
+    label: `Rated ${business.rating}/5`,
+    sub: `${business.reviewCount}+ verified reviews`,
+  },
+  {
+    icon: "lucide:shield-check",
+    label: "Licensed & Insured",
+    sub: "Fully bonded & certified",
+  },
+  {
+    icon: "lucide:badge-check",
+    label: business.guaranteeText,
+    sub: "Or we make it right, free",
+  },
+  {
+    icon: "lucide:clock",
+    label: "Fast Response",
+    sub: "Same & next-day availability",
+  },
+];
+---
+
+<section class="bg-neutral-100 border-y border-neutral-200 py-6">
+  <div class="max-w-(--breakpoint-xl) mx-auto px-5">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      {items.map((item, i) => (
+        <div class="group flex items-center gap-3" data-aos="fade-up" data-aos-delay={(i + 1) * 100}>
+          <div class="shrink-0 text-accent-500"><Icon name={item.icon} class="w-6 h-6" /></div>
+          <div>
+            <div class="font-semibold text-primary-900 text-sm leading-tight">{item.label}</div>
+            <div class="text-neutral-500 text-xs mt-0.5">{item.sub}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

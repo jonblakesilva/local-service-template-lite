@@ -1,0 +1,165 @@
+---
+// Option A form: a plain HTML form that sends submissions to your email through Web3Forms.
+// Used by formembed.astro (contact) and the home page hero ("quote").
+// The access key is public by design. See SETUP-FORMS.md.
+import { business } from "@/config/business";
+import { web3formsAccessKey } from "@/config/forms";
+
+interface Props {
+  variant: "contact" | "quote";
+}
+
+const { variant } = Astro.props;
+
+const input =
+  "w-full px-4 py-3 border border-neutral-300 rounded-lg text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent transition bg-white";
+const label = "block text-sm font-medium text-neutral-700 mb-1.5";
+const legend = "block text-sm font-medium text-neutral-700 mb-2";
+const radioRow = "flex flex-wrap gap-x-5 gap-y-2";
+
+const subjects = {
+  contact: "New quote request",
+  quote: "New quote request (home page)",
+};
+const subject = `${subjects[variant]} for ${business.name}`;
+const id = `w3f-${variant}`;
+const services = [...business.primaryServices, "Not sure"];
+const consentTopic = "my request";
+const buttonText = {
+  contact: "Send My Request",
+  quote: "Get My Free Quote",
+}[variant];
+const success = "Thanks, we got it. We will be in touch soon.";
+const track = "quote_submitted";
+---
+
+<form
+  id={id}
+  data-w3f
+  data-success={success}
+  data-track={track}
+  data-phone={business.phone}
+  data-button={buttonText}
+  action="https://api.web3forms.com/submit"
+  method="POST"
+  class="space-y-5 text-left"
+>
+  <input type="hidden" name="access_key" value={web3formsAccessKey} />
+  <input type="hidden" name="subject" value={subject} />
+  <input type="hidden" name="from_name" value={`${business.name} website`} />
+  <input type="hidden" name="source" value={`Website: ${variant}`} />
+  <!-- Spam trap. People never see or tick this box; bots often do. -->
+  <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
+
+  {variant === "contact" && (
+    <>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div>
+          <label for={`${id}-name`} class={label}>Full name *</label>
+          <input id={`${id}-name`} type="text" name="name" required placeholder="Jane Smith" class={input} />
+        </div>
+        <div>
+          <label for={`${id}-phone2`} class={label}>Phone number *</label>
+          <input id={`${id}-phone2`} type="tel" name="phone" required placeholder="(555) 555-5555" class={input} />
+        </div>
+      </div>
+      <div>
+        <label for={`${id}-email2`} class={label}>Email address</label>
+        <input id={`${id}-email2`} type="email" name="email" placeholder="jane@example.com" class={input} />
+      </div>
+    </>
+  )}
+
+  {variant === "quote" && (
+    <>
+      <div>
+        <label for={`${id}-name`} class={label}>Your name</label>
+        <input id={`${id}-name`} type="text" name="name" required placeholder="Jane Smith" class={input} />
+      </div>
+      <div>
+        <label for={`${id}-phone2`} class={label}>Phone number</label>
+        <input id={`${id}-phone2`} type="tel" name="phone" required placeholder="(555) 555-5555" class={input} />
+      </div>
+    </>
+  )}
+
+  <div>
+    <label for={`${id}-service`} class={label}>Service needed</label>
+    <select id={`${id}-service`} name="service" required={variant === "quote"} class={input}>
+      <option value="">Select a service</option>
+      {services.map((s) => <option value={s}>{s}</option>)}
+    </select>
+  </div>
+
+  {variant === "contact" && (
+    <div>
+      <label for={`${id}-message`} class={label}>Tell us more</label>
+      <textarea id={`${id}-message`} name="message" rows="4" class={`${input} resize-none`}></textarea>
+    </div>
+  )}
+
+  <label class="flex items-start gap-3 text-sm text-neutral-600">
+    <input type="checkbox" name="sms_consent" value="Consented" class="mt-1" />
+    <span>
+      I agree to receive text messages from {business.name} about {consentTopic}. Message and data rates may apply. This is optional.
+    </span>
+  </label>
+
+  <button
+    type="submit"
+    class="w-full bg-accent-500 hover:bg-accent-600 text-white font-bold py-3.5 rounded-lg transition-colors duration-200 shadow-sm text-base disabled:opacity-60"
+  >
+    {buttonText}
+  </button>
+
+  {variant !== "quote" && (
+    <p class="text-xs text-neutral-400 text-center">
+      By submitting, you agree to our <a href="/privacy" class="underline hover:text-neutral-600">Privacy Policy</a>. We never share your info.
+    </p>
+  )}
+
+  <div data-w3f-result role="status" aria-live="polite" class="hidden text-center py-3 rounded-lg text-sm font-medium"></div>
+</form>
+
+<script>
+  // Sends the form to Web3Forms without leaving the page and shows a plain message.
+  function wireWeb3Forms() {
+    document.querySelectorAll<HTMLFormElement>("form[data-w3f]").forEach((form) => {
+      if (form.dataset.ready) return;
+      form.dataset.ready = "1";
+      const result = form.querySelector<HTMLElement>("[data-w3f-result]")!;
+      const btn = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        btn.textContent = "Sending...";
+        btn.disabled = true;
+        result.classList.remove("hidden");
+        try {
+          const res = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(Object.fromEntries(new FormData(form))),
+          });
+          const data = await res.json();
+          if (res.ok && data.success !== false) {
+            result.className = "text-center py-3 rounded-lg text-sm font-medium bg-green-50 text-green-700";
+            result.textContent = form.dataset.success ?? "Thanks, we got it.";
+            form.reset();
+            const event = form.dataset.track;
+            if (event) (window as any).posthog?.capture(event, { form: form.id, page: location.pathname });
+          } else {
+            result.className = "text-center py-3 rounded-lg text-sm font-medium bg-red-50 text-red-700";
+            result.textContent = data.message || `Something went wrong. Please call us at ${form.dataset.phone}.`;
+          }
+        } catch {
+          result.className = "text-center py-3 rounded-lg text-sm font-medium bg-red-50 text-red-700";
+          result.textContent = `We could not send that. Please call us at ${form.dataset.phone}.`;
+        }
+        btn.textContent = form.dataset.button ?? "Send";
+        btn.disabled = false;
+      });
+    });
+  }
+  document.addEventListener("astro:page-load", wireWeb3Forms);
+  wireWeb3Forms();
+</script>

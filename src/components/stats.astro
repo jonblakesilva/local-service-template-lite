@@ -1,0 +1,50 @@
+---
+import { Icon } from "astro-icon/components";
+import { business } from "@/config/business";
+
+const stats = [
+  {
+    value: business.stats.jobsCompleted,
+    suffix: "+",
+    label: "Jobs Completed",
+    icon: "lucide:clipboard-check",
+  },
+  {
+    value: business.stats.yearsInBusiness,
+    suffix: "+",
+    label: "Years in Business",
+    icon: "lucide:calendar-days",
+  },
+  {
+    value: business.stats.satisfactionRate,
+    suffix: "%",
+    label: "Customer Satisfaction",
+    icon: "lucide:heart",
+  },
+  {
+    value: business.stats.citiesServed,
+    suffix: "+",
+    label: "Cities Served",
+    icon: "lucide:map-pin",
+  },
+];
+---
+
+<section class="bg-primary-900 text-white py-20 lg:py-24">
+  <div class="max-w-(--breakpoint-xl) mx-auto px-5">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
+      {stats.map((stat, i) => (
+        <div class="group flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay={(i + 1) * 100}>
+          <div class="text-accent-400 mb-3 opacity-80"><Icon name={stat.icon} class="w-7 h-7" /></div>
+          <div class="font-heading font-bold text-5xl lg:text-6xl text-white">
+            <span
+              data-counter={stat.value}
+              data-suffix={stat.suffix}
+            >0{stat.suffix}</span>
+          </div>
+          <div class="text-white/60 text-sm font-medium mt-2 uppercase tracking-wide">{stat.label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

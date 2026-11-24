@@ -1,0 +1,67 @@
+---
+// Renders form embed code pasted into src/config/forms.ts.
+// - Option A (formProvider "web3forms" plus an access key): a native form from web3form.astro.
+// - Option B (formProvider "embed"): the code pasted into the slot, as below.
+// - Empty slot, dev server: a clearly styled setup box.
+// - Empty slot, live site: a simple "Call us" box (no setup text ever shows to visitors).
+// - Filled slot: the pasted HTML. Any <script> tags in it are re-created in the browser so they run.
+import { business } from "@/config/business";
+import { forms, formProvider, web3formsReady } from "@/config/forms";
+import Web3Form from "@/components/web3form.astro";
+
+interface Props {
+  slot: keyof typeof forms;
+  /** Shown above the call fallback on the live site. */
+  fallbackText?: string;
+}
+
+const { slot, fallbackText = "The best way to reach us is by phone." } = Astro.props;
+const variants = { contactEmbed: "contact" } as const;
+const useWeb3 = formProvider === "web3forms" && web3formsReady;
+const code = formProvider === "embed" ? (forms[slot] ?? "").trim() : "";
+const isDev = import.meta.env.DEV;
+---
+
+{useWeb3 ? (
+  <Web3Form variant={variants[slot]} />
+) : code ? (
+  <div data-form-embed class="w-full" set:html={code} />
+) : isDev ? (
+  <div data-form-placeholder class="border-2 border-dashed border-accent-400 bg-accent-50 rounded-xl p-6 text-center">
+    <p class="font-semibold text-accent-800 mb-1">Form not set up yet</p>
+    <p class="text-sm text-accent-800">
+      {formProvider === "web3forms"
+        ? <>Paste your Web3Forms access key in <code class="font-mono bg-white/70 px-1 rounded">src/config/forms.ts</code> (web3formsAccessKey).</>
+        : <>Paste your form embed code in <code class="font-mono bg-white/70 px-1 rounded">src/config/forms.ts</code> ({slot}).</>}
+      This box is only visible while developing. On the live site visitors see a Call us button instead.
+    </p>
+  </div>
+) : (
+  <div data-form-placeholder class="bg-neutral-50 border border-neutral-200 rounded-xl p-6 text-center">
+    <p class="text-neutral-600 mb-4">{fallbackText}</p>
+    <a
+      href={`tel:${business.phoneRaw}`}
+      class="inline-flex items-center justify-center bg-accent-500 hover:bg-accent-600 text-white font-bold px-8 py-3.5 rounded-xl transition-colors"
+    >
+      Call {business.phone}
+    </a>
+  </div>
+)}
+
+<script>
+  // Scripts inserted with innerHTML never run, so swap each one for a fresh copy that does.
+  function activateEmbeds() {
+    document.querySelectorAll<HTMLElement>("[data-form-embed]").forEach((box) => {
+      if (box.dataset.ready) return;
+      box.dataset.ready = "1";
+      box.querySelectorAll("script").forEach((old) => {
+        const fresh = document.createElement("script");
+        for (const attr of Array.from(old.attributes)) fresh.setAttribute(attr.name, attr.value);
+        fresh.text = old.text;
+        old.replaceWith(fresh);
+      });
+    });
+  }
+  document.addEventListener("astro:page-load", activateEmbeds);
+  activateEmbeds();
+</script>

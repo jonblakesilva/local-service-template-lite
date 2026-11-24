@@ -1,0 +1,70 @@
+// 1. Import utilities from `astro:content`
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
+
+// 2. Define your collection(s)
+const blogCollection = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
+  schema: z.object({
+    draft: z.boolean(),
+    title: z.string(),
+    snippet: z.string(),
+    image: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }),
+    publishDate: z.string().transform(str => new Date(str)),
+    author: z.string().default('The Lead Venture'),
+    category: z.string(),
+    tags: z.array(z.string()),
+    tldr: z.array(z.string()).optional(), // optional key-takeaway bullets shown at the top of the post
+  }),
+});
+
+const teamCollection = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/team' }),
+  schema: z.object({
+    draft: z.boolean(),
+    name: z.string(),
+    title: z.string(),
+    avatar: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }),
+    publishDate: z.string().transform(str => new Date(str)),
+  }),
+});
+
+const servicesCollection = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/services' }),
+  schema: z.object({
+    draft: z.boolean().default(false),
+    title: z.string(), // e.g. "Lawn Mowing"
+    urlSlug: z.string(), // e.g. "lawn-mowing" — used in the URL
+    shortDesc: z.string(), // used on the services listing/cards + meta description
+    icon: z.string().optional(), // icon name from astro-icon (bx/uil sets)
+    order: z.number().default(0), // controls listing order
+    image: z.object({ src: z.string(), alt: z.string() }).optional(),
+  }),
+});
+
+const locationsCollection = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/locations' }),
+  schema: z.object({
+    draft: z.boolean().default(false),
+    city: z.string(), // e.g. "Toledo"
+    state: z.string(), // e.g. "OH"
+    urlSlug: z.string(), // e.g. "toledo-oh" — used in the URL
+    shortDesc: z.string().optional(), // optional local blurb, meta description fallback
+    order: z.number().default(0),
+  }),
+});
+
+// 3. Export a single `collections` object to register your collection(s)
+export const collections = {
+  'blog': blogCollection,
+  'team': teamCollection,
+  'services': servicesCollection,
+  'locations': locationsCollection,
+};
