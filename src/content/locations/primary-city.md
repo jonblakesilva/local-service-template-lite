@@ -13,4 +13,4 @@ order: 1
 
 We're proud to serve customers throughout Your City, ST. Our team is familiar with the neighborhoods and properties in this area, which means we show up knowing what to expect and get the job done efficiently.
 
-Whether you're in [neighborhood/area 1], [neighborhood/area 2], or anywhere else in Your City, we offer the same responsive service and honest pricing. [Add one sentence about why this area is important to you — e.g. "Many of our team members live here and we take pride in keeping our community well-maintained."]
+Whether you're in [neighborhood/area 1], [neighborhood/area 2], or anywhere else in Your City, we offer the same responsive service and honest pricing. [Add one sentence about why this area is important to you, e.g. "Many of our team members live here and we take pride in keeping our community well-maintained."]

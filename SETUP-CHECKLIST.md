@@ -129,7 +129,8 @@ Each of these pages contains `// CUSTOMIZE` or `<!-- CUSTOMIZE -->` comments. Re
 - [ ] Replace `public/opengraph.jpg` with a branded 1200×630 image (site-wide social share preview: appears on every page that lacks its own OG image)
 - [ ] Replace `public/favicon.svg` with the client's favicon
 - [ ] Add hero image(s) and update any references in `src/components/hero.astro`
-- [ ] Add real before/after project photos in `src/components/beforeafter.astro` (set `before` and `after` fields in the `projects` array to `/images/*.webp` paths; leave as `""` for the gradient placeholder)
+- [ ] Add real before/after project photos in `src/components/beforeafter.astro` (set the `after` field, and `before` too if you have it, in the `projects` array to `/images/*.webp` paths. With no photos the "Recent work" section is left out of the page)
+- [ ] Optional: set `heroImage` and `heroImageAlt` in `business.ts` to put a wide photo of your work behind the home page headline (WebP, about 1600px wide, in `public/images/`)
 - [ ] Add service hero images: set `image: { src: "/images/...", alt: "..." }` in service frontmatter
 - [ ] Add blog hero images: 1200px-wide WebP, referenced via local `/images/*.webp` paths (not external URLs)
 - [ ] **All images must be WebP**: see `CLAUDE.md` for the generation + conversion pipeline. No JPEGs or PNGs.

@@ -24,10 +24,10 @@ When you schedule [Service One] with us, here's what happens:
 
 ## Why Customers Choose Us for [Service One]
 
-- [Differentiator 1 — e.g. "We use [specific equipment/method] that produces better results"]
-- [Differentiator 2 — e.g. "Same team every time, so nothing gets missed"]
-- [Differentiator 3 — e.g. "No long-term contracts — cancel anytime"]
+- [Differentiator 1, e.g. "We use [specific equipment/method] that produces better results"]
+- [Differentiator 2, e.g. "Same team every time, so nothing gets missed"]
+- [Differentiator 3, e.g. "No long-term contracts, cancel anytime"]
 
 ## Pricing
 
-Pricing depends on [relevant factors for this service]. Most quotes take under a minute — call or fill out the form below for a free estimate.
+Pricing depends on [relevant factors for this service]. Most quotes take under a minute, call or fill out the form below for a free estimate.

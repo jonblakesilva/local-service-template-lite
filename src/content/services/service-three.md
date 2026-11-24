@@ -26,7 +26,7 @@ order: 3
 [Explain whether the customer needs to be present or not.]
 
 **How often do I need this service?**
-[If applicable — recurring vs. one-time guidance.]
+[If applicable, recurring vs. one-time guidance.]
 
 ## Get a Quote
 

@@ -7,7 +7,7 @@ import { business } from "@/config/business";
 // If your niche prices differently (per hour, per unit, etc.),
 // adapt the inputs and calculation logic below.
 //
-// Option A: Per-size pricing (current setup — works for cleaning, landscaping, etc.)
+// Option A: Per-size pricing (current setup, works for cleaning, landscaping, etc.)
 // Option B: Per-unit pricing (roofing by sq ft, painting by room, etc.)
 // Option C: Project-type pricing (HVAC by system type, plumbing by job type, etc.)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -26,7 +26,7 @@ import { business } from "@/config/business";
           Instant Cost Estimator
         </h1>
         <p class="text-white/70 text-lg mt-4">
-          Get a ballpark price in seconds. This is a rough estimate — for an exact quote, just call or fill out the form.
+          Get a ballpark price in seconds. This is a rough estimate, for an exact quote, just call or fill out the form.
         </p>
       </div>
     </div>
@@ -96,7 +96,7 @@ import { business } from "@/config/business";
               href="/contact"
               class="block w-full text-center bg-accent-500 hover:bg-accent-600 text-white font-bold py-4 rounded-xl transition-colors"
             >
-              Get an Exact Quote — Free
+              Get an Exact Quote, Free
             </a>
           </div>
         </div>
@@ -109,7 +109,7 @@ import { business } from "@/config/business";
             </h2>
             <p class="text-neutral-600 leading-relaxed text-sm">
               <!-- CUSTOMIZE: Explain how your pricing actually works so customers trust the estimate. -->
-              Our pricing depends on [key factors that affect your pricing — e.g. "the size of the job, the condition
+              Our pricing depends on [key factors that affect your pricing, e.g. "the size of the job, the condition
               of the property, and the specific service selected"]. The estimator above gives you a starting range,
               but every job is a little different.
             </p>
@@ -122,7 +122,7 @@ import { business } from "@/config/business";
                 desc: "Our estimates are always free and there's no pressure to book.",
               },
               {
-                title: "Upfront pricing — always",
+                title: "Upfront pricing, always",
                 desc: "We tell you the exact price before we start. No surprises at the end.",
               },
               {
@@ -153,7 +153,7 @@ import { business } from "@/config/business";
             >
               {business.phone}
             </a>
-            <p class="text-white/50 text-xs mt-1">Mon–Sat 7am–7pm</p>
+            <p class="text-white/50 text-xs mt-1">Mon-Sat 7am-7pm</p>
           </div>
         </div>
 
@@ -191,7 +191,7 @@ import { business } from "@/config/business";
     const low  = Math.round((base * 0.85) / 5) * 5;
     const high = Math.round((base * 1.20) / 5) * 5;
 
-    estimateOutput.textContent = `$${low.toLocaleString()} – $${high.toLocaleString()}`;
+    estimateOutput.textContent = `$${low.toLocaleString()} - $${high.toLocaleString()}`;
   }
 
   jobSizeInput.addEventListener("input", calculate);

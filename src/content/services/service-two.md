@@ -27,4 +27,4 @@ We approach [Service Two] differently than most companies:
 
 ## Pricing
 
-Every job is different. Pricing depends on [relevant variables]. Fill out the form below for a free, no-obligation estimate — we usually respond within one business day.
+Every job is different. Pricing depends on [relevant variables]. Fill out the form below for a free, no-obligation estimate, we usually respond within one business day.

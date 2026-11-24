@@ -18,7 +18,7 @@ Getting consistent 5-star reviews is one of the highest-leverage activities for 
 
 When someone searches for a contractor or service provider, they look at three things before calling: your rating, your number of reviews, and how recently you got them. A business with 200 reviews at 4.8 stars will get the call over a competitor with 15 reviews at 5.0 almost every time.
 
-Google also uses review velocity and recency as a local ranking signal. That means getting reviews consistently — not in batches — helps you hold your position in the local pack.
+Google also uses review velocity and recency as a local ranking signal. That means getting reviews consistently, not in batches, helps you hold your position in the local pack.
 
 ## The Right Time to Ask
 
@@ -38,17 +38,17 @@ The #1 reason customers don't leave reviews is friction. Remove every possible o
 
 ## What to Say (and Not Say)
 
-**Do:** Ask for an honest review and mention specific things they can comment on — the speed of your response, the quality of the work, how you left the job site.
+**Do:** Ask for an honest review and mention specific things they can comment on, the speed of your response, the quality of the work, how you left the job site.
 
 **Don't:** Ask for a "5-star" review or offer anything in return. Google can remove reviews that appear incentivized.
 
 ## Respond to Every Review
 
-Responding to reviews — positive and negative — signals to Google that your business is active and engaged. For positive reviews, thank the customer and mention the specific service. For negative reviews, stay professional, acknowledge the issue, and offer to make it right offline.
+Responding to reviews, positive and negative, signals to Google that your business is active and engaged. For positive reviews, thank the customer and mention the specific service. For negative reviews, stay professional, acknowledge the issue, and offer to make it right offline.
 
 ## Set a Weekly Review Goal
 
-Pick a number — even just 2-3 per week — and make it part of your close-out process on every completed job. Businesses that treat reviews as a system outperform those that treat them as an afterthought.
+Pick a number, even just 2-3 per week, and make it part of your close-out process on every completed job. Businesses that treat reviews as a system outperform those that treat them as an afterthought.
 
 ---
 

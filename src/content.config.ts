@@ -41,7 +41,7 @@ const servicesCollection = defineCollection({
   schema: z.object({
     draft: z.boolean().default(false),
     title: z.string(), // e.g. "Lawn Mowing"
-    urlSlug: z.string(), // e.g. "lawn-mowing" — used in the URL
+    urlSlug: z.string(), // e.g. "lawn-mowing", used in the URL
     shortDesc: z.string(), // used on the services listing/cards + meta description
     icon: z.string().optional(), // icon name from astro-icon (bx/uil sets)
     order: z.number().default(0), // controls listing order
@@ -55,7 +55,7 @@ const locationsCollection = defineCollection({
     draft: z.boolean().default(false),
     city: z.string(), // e.g. "Toledo"
     state: z.string(), // e.g. "OH"
-    urlSlug: z.string(), // e.g. "toledo-oh" — used in the URL
+    urlSlug: z.string(), // e.g. "toledo-oh", used in the URL
     shortDesc: z.string().optional(), // optional local blurb, meta description fallback
     order: z.number().default(0),
   }),
