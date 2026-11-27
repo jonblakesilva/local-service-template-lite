@@ -221,7 +221,7 @@ for (const [url, n] of inbound) {
 
 // ---------- site-level checks ----------
 for (const f of ["robots.txt", "llms.txt", "404.html", "_headers"]) {
-  if (!fs.existsSync(path.join(DIST, f))) (["_headers", "llms.txt"].includes(f) ? warn : fail)("site", `missing ${f}`);
+  if (!fs.existsSync(path.join(DIST, f))) (f === "_headers" ? warn : fail)("site", `missing ${f}`);
 }
 if (!files.some((f) => /sitemap.*\.xml$/.test(f))) fail("site", "missing sitemap");
 for (const f of files) {
