@@ -18,10 +18,10 @@ import path from "path";
 const DIST = path.resolve("dist");
 const STRICT = process.argv.includes("--strict");
 
-// Pages that are noindex on purpose. They skip the keyword-style checks.
-const NOINDEX_OK = new Set(["/survey/", "/links/", "/thank-you/", "/404/"]);
+// A noindex page is fine on purpose (thank-you, survey, thin directory pages...) as long as it is
+// NOT in the sitemap. Noindex + in the sitemap is a mixed signal Google reports as an error.
 // Raster files allowed in dist (social share image, favicons).
-const RASTER_OK = /(opengraph|favicon|apple-touch|og-)/i;
+const RASTER_OK = /(opengraph|favicon|apple-touch|icon-\d|og-|(^|\/)og\/)/i;
 
 // ---------- small HTML helpers ----------
 const ENT = { amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", nbsp: " " };
@@ -64,12 +64,27 @@ if (!fs.existsSync(DIST)) {
 
 const files = walk(DIST);
 const htmlFiles = files.filter((f) => f.endsWith(".html"));
+// Pages are stored as /about/index.html (directory format) or /about.html (file format).
+// Both are keyed as "/about/" so links work either way.
 const urlOf = (f) => {
   const rel = "/" + path.relative(DIST, f).split(path.sep).join("/");
   if (rel === "/404.html") return "/404/";
-  return rel.replace(/index\.html$/, "");
+  if (rel.endsWith("/index.html")) return rel.replace(/index\.html$/, "");
+  return rel.replace(/\.html$/, "/");
 };
-const pages = htmlFiles.map((f) => ({ url: urlOf(f), html: fs.readFileSync(f, "utf8") }));
+// Skip HTML fragments (partials loaded by JavaScript): they have no <html> element.
+const pages = htmlFiles
+  .map((f) => ({ url: urlOf(f), html: fs.readFileSync(f, "utf8") }))
+  .filter((p) => /<html[\s>]/i.test(p.html));
+const sitemapFiles = files.filter((f) => /sitemap[^/]*\.xml$/.test(f));
+const inSitemap = new Set(
+  sitemapFiles.flatMap((f) =>
+    [...fs.readFileSync(f, "utf8").matchAll(/<loc>([^<]+)<\/loc>/g)]
+      .map((m) => { try { return new URL(m[1].trim()).pathname; } catch { return ""; } })
+      .filter((u) => u && !u.endsWith(".xml"))
+      .map((u) => u.replace(/(index)?\.html$/, "").replace(/\/?$/, "/")),
+  ),
+);
 const built = new Set(pages.map((p) => p.url));
 
 const failures = [];
@@ -79,10 +94,12 @@ const warn = (url, msg) => warnings.push(`${url}: ${msg}`);
 
 // ---------- per-page checks ----------
 const inbound = new Map(pages.map((p) => [p.url, 0]));
+const noindexPages = new Set();
 
 for (const { url, html } of pages) {
   const robots = metaContent(html, "robots") || "";
   const noindex = /noindex/i.test(robots);
+  if (noindex) noindexPages.add(url);
   const title = decode((html.match(/<title>([\s\S]*?)<\/title>/i) || [])[1] || "").trim();
   const desc = metaContent(html, "description");
   const canonTag = (html.match(/<link\b[^>]*rel=["']canonical["'][^>]*>/i) || [])[0];
@@ -90,7 +107,8 @@ for (const { url, html } of pages) {
   const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map((m) => strip(m[1]));
   const visible = strip(html);
 
-  if (noindex && !NOINDEX_OK.has(url)) fail(url, "page is noindex but is not one of the noindex-on-purpose pages");
+  if (noindex && inSitemap.has(url)) fail(url, "page is noindex but listed in the sitemap (mixed signal, Search Console reports it as an error)");
+  if (!noindex && sitemapFiles.length && !inSitemap.has(url) && url !== "/404/") warn(url, "indexable page missing from the sitemap");
 
   // Title, description, canonical, h1
   if (!title) fail(url, "missing <title>");
@@ -99,7 +117,7 @@ for (const { url, html } of pages) {
     if (desc === null || !desc) fail(url, "missing meta description");
     else if (desc.length < 70 || desc.length > 160) warn(url, `meta description is ${desc.length} characters (aim for 70 to 160)`);
     if (!canon) fail(url, "missing canonical link");
-    else if (!canon.replace(/^https?:\/\/[^/]+/, "").replace(/\/?$/, "/").endsWith(url === "/" ? "/" : url))
+    else if (!canon.replace(/^https?:\/\/[^/]+/, "").replace(/(index)?\.html$/, "").replace(/\/?$/, "/").endsWith(url === "/" ? "/" : url))
       warn(url, `canonical "${canon}" does not point at this page`);
   }
   if (h1s.length !== 1) fail(url, `${h1s.length} <h1> elements (need exactly 1)`);
@@ -117,11 +135,14 @@ for (const { url, html } of pages) {
     const tag = m[0];
     const srcs = [attr(tag, "src"), ...(attr(tag, "srcset") || "").split(",").map((s) => s.trim().split(" ")[0])].filter(Boolean);
     for (const u of srcs) {
-      if (!/\.(webp|avif|svg)(\?|$)/i.test(u) && !/[?&](fm|format)=(webp|avif)\b/i.test(u) && !u.startsWith("data:") && !RASTER_OK.test(u)) warn(url, `non-WebP image ${u}`);
+      if (!/\.(webp|avif|svg)(\?|$)/i.test(u) && !/[?&](fm|format|output)=(webp|avif)\b/i.test(u) && !u.startsWith("data:") && !RASTER_OK.test(u)) warn(url, `non-WebP image ${u}`);
     }
     if (m[1].toLowerCase() === "img") {
       if (attr(tag, "alt") === null) fail(url, `image without alt text: ${srcs[0] || tag.slice(0, 60)}`);
-      if (!attr(tag, "width") || !attr(tag, "height")) warn(url, `image without width/height (causes layout shift): ${srcs[0] || tag.slice(0, 60)}`);
+      // Width/height attributes are not needed when CSS fixes the box (for example "h-16 w-16" or "absolute inset-0 h-full w-full").
+      const cls = attr(tag, "class") || "";
+      const sizedByCss = /(^|\s)(h|size|aspect)-\S+/.test(cls) && /(^|\s)(w|size)-\S+/.test(cls);
+      if (!sizedByCss && (!attr(tag, "width") || !attr(tag, "height"))) warn(url, `image without width/height (causes layout shift): ${srcs[0] || tag.slice(0, 60)}`);
     }
   }
 
@@ -155,8 +176,14 @@ for (const { url, html } of pages) {
     .map((h) => h.split("#")[0].split("?")[0])
     .filter(Boolean);
   for (const l of new Set(links)) {
-    if (/\.[a-z0-9]{2,5}$/i.test(l) || l.startsWith("/api/")) continue; // files, not pages
-    const target = l.endsWith("/") ? l : l + "/";
+    if (l.startsWith("/api/")) continue;
+    if (/\.[a-z0-9]{2,5}$/i.test(l) && !/\.html$/i.test(l)) {
+      // A file (image, pdf, xml...): just check it exists.
+      if (!fs.existsSync(path.join(DIST, decodeURIComponent(l)))) fail(url, `broken link to file ${l}`);
+      continue;
+    }
+    const clean = l.replace(/(index)?\.html$/i, "");
+    const target = clean.endsWith("/") ? clean : clean + "/";
     if (!built.has(target)) fail(url, `broken internal link to ${l}`);
     else if (target !== url) inbound.set(target, inbound.get(target) + 1);
   }
@@ -164,7 +191,7 @@ for (const { url, html } of pages) {
 
 // Orphans: indexable pages nothing links to
 for (const [url, n] of inbound) {
-  if (url === "/" || NOINDEX_OK.has(url) || n > 0) continue;
+  if (url === "/" || url === "/404/" || noindexPages.has(url) || n > 0) continue;
   warn(url, "no other page links here (orphan page)");
 }
 

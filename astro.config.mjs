@@ -7,7 +7,8 @@ import icon from "astro-icon";
 // https://astro.build/config
 export default defineConfig({
   site: "https://yourdomain.com", // CUSTOMIZE: replace with your actual domain
-  integrations: [mdx(), sitemap(), icon()],
+  // Noindex pages (thank-you) stay out of the sitemap.
+  integrations: [mdx(), sitemap({ filter: (page) => !/\/thank-you\/?$/.test(page) }), icon()],
   vite: {
     plugins: [tailwindcss()],
   },
