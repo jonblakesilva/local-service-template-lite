@@ -6,6 +6,7 @@
  *
  *   npm run audit            (failures + warnings)
  *   npm run audit -- --strict  (warnings count as failures too)
+ *   npm run audit -- --ignore /go/   (skip links a Worker or redirect handles)
  *
  * Checks adapted from NicoSKOOL/99-website (MIT licence):
  * verify-seo.mjs, validate-jsonld.mjs and check-links.mjs, reworked to read
@@ -17,6 +18,8 @@ import path from "path";
 
 const DIST = path.resolve("dist");
 const STRICT = process.argv.includes("--strict");
+// --ignore /go/,/api/  -> link prefixes served by a Worker or redirect outside dist/ (not checked).
+const IGNORE = (process.argv.includes("--ignore") ? process.argv[process.argv.indexOf("--ignore") + 1] || "" : "").split(",").filter(Boolean);
 
 // A noindex page is fine on purpose (thank-you, survey, thin directory pages...) as long as it is
 // NOT in the sitemap. Noindex + in the sitemap is a mixed signal Google reports as an error.
@@ -42,9 +45,10 @@ const strip = (html) =>
     .trim();
 const norm = (s) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+// Reads an attribute. A bare attribute (Astro renders alt="" as just "alt") returns "".
 const attr = (tag, name) => {
-  const m = tag.match(new RegExp(`\\b${name}=(?:"([^"]*)"|'([^']*)')`, "i"));
-  return m ? decode(m[1] ?? m[2]) : null;
+  const m = tag.match(new RegExp(`\\s${name}(?:=(?:"([^"]*)"|'([^']*)'|([^\\s>"']+)))?(?=[\\s/>])`, "i"));
+  return m ? decode(m[1] ?? m[2] ?? m[3] ?? "") : null;
 };
 const metaContent = (html, name) => {
   for (const m of html.matchAll(/<meta\b[^>]*>/gi)) {
@@ -76,6 +80,9 @@ const urlOf = (f) => {
 const pages = htmlFiles
   .map((f) => ({ url: urlOf(f), html: fs.readFileSync(f, "utf8") }))
   .filter((p) => /<html[\s>]/i.test(p.html));
+// Redirect-only pages (<meta http-equiv="refresh">, e.g. /go/ affiliate links) are valid link targets,
+// but have no content to check.
+const isRedirectPage = (html) => /<meta[^>]+http-equiv=["']?refresh/i.test(html);
 const sitemapFiles = files.filter((f) => /sitemap[^/]*\.xml$/.test(f));
 const inSitemap = new Set(
   sitemapFiles.flatMap((f) =>
@@ -86,6 +93,18 @@ const inSitemap = new Set(
   ),
 );
 const built = new Set(pages.map((p) => p.url));
+const contentPages = pages.filter((p) => !isRedirectPage(p.html));
+// Paths handled by redirect rules (Cloudflare Pages / Netlify _redirects) count as valid links.
+const redirectRules = fs.existsSync(path.join(DIST, "_redirects"))
+  ? fs.readFileSync(path.join(DIST, "_redirects"), "utf8").split(/\r?\n/).map((l) => l.trim().split(/\s+/)[0]).filter((x) => x && x.startsWith("/"))
+  : [];
+const redirected = (u) => redirectRules.some((r) => {
+  const rule = r.replace(/\/$/, "");
+  const link = u.replace(/\/$/, "");
+  if (rule.endsWith("*")) return link.startsWith(rule.slice(0, -1));
+  if (rule.includes(":")) return new RegExp("^" + rule.replace(/:[^/]+/g, "[^/]+") + "$").test(link);
+  return rule === link;
+});
 
 const failures = [];
 const warnings = [];
@@ -93,10 +112,10 @@ const fail = (url, msg) => failures.push(`${url}: ${msg}`);
 const warn = (url, msg) => warnings.push(`${url}: ${msg}`);
 
 // ---------- per-page checks ----------
-const inbound = new Map(pages.map((p) => [p.url, 0]));
+const inbound = new Map(contentPages.map((p) => [p.url, 0]));
 const noindexPages = new Set();
 
-for (const { url, html } of pages) {
+for (const { url, html } of contentPages) {
   const robots = metaContent(html, "robots") || "";
   const noindex = /noindex/i.test(robots);
   if (noindex) noindexPages.add(url);
@@ -108,7 +127,10 @@ for (const { url, html } of pages) {
   const visible = strip(html);
 
   if (noindex && inSitemap.has(url)) fail(url, "page is noindex but listed in the sitemap (mixed signal, Search Console reports it as an error)");
-  if (!noindex && sitemapFiles.length && !inSitemap.has(url) && url !== "/404/") warn(url, "indexable page missing from the sitemap");
+  const canonPath = canon ? canon.replace(/^https?:\/\/[^/]+/, "").replace(/(index)?\.html$/, "").replace(/\/?$/, "/") : url;
+  const canonSelf = canonPath === url;
+  // Pages whose canonical points elsewhere are rightly left out of the sitemap.
+  if (!noindex && canonSelf && sitemapFiles.length && !inSitemap.has(url) && url !== "/404/") warn(url, "indexable page missing from the sitemap");
 
   // Title, description, canonical, h1
   if (!title) fail(url, "missing <title>");
@@ -120,7 +142,7 @@ for (const { url, html } of pages) {
     else if (!canon.replace(/^https?:\/\/[^/]+/, "").replace(/(index)?\.html$/, "").replace(/\/?$/, "/").endsWith(url === "/" ? "/" : url))
       warn(url, `canonical "${canon}" does not point at this page`);
   }
-  if (h1s.length !== 1) fail(url, `${h1s.length} <h1> elements (need exactly 1)`);
+  if (h1s.length !== 1) (noindex ? warn : fail)(url, `${h1s.length} <h1> elements (need exactly 1)`);
 
   // Heading order
   let last = 0;
@@ -133,6 +155,8 @@ for (const { url, html } of pages) {
   // Images: alt, size, format
   for (const m of html.matchAll(/<(img|source)\b[^>]*>/gi)) {
     const tag = m[0];
+    // Skip 1x1 tracking pixels (Facebook, LinkedIn, Google Ads noscript fallbacks).
+    if (/facebook\.com\/tr|px\.ads\.linkedin|googleadservices|doubleclick/i.test(tag) || (attr(tag, "width") === "1" && attr(tag, "height") === "1")) continue;
     const srcs = [attr(tag, "src"), ...(attr(tag, "srcset") || "").split(",").map((s) => s.trim().split(" ")[0])].filter(Boolean);
     for (const u of srcs) {
       if (!/\.(webp|avif|svg)(\?|$)/i.test(u) && !/[?&](fm|format|output)=(webp|avif)\b/i.test(u) && !u.startsWith("data:") && !RASTER_OK.test(u)) warn(url, `non-WebP image ${u}`);
@@ -176,16 +200,16 @@ for (const { url, html } of pages) {
     .map((h) => h.split("#")[0].split("?")[0])
     .filter(Boolean);
   for (const l of new Set(links)) {
-    if (l.startsWith("/api/")) continue;
+    if (l.startsWith("/api/") || IGNORE.some((p) => l.startsWith(p))) continue;
     if (/\.[a-z0-9]{2,5}$/i.test(l) && !/\.html$/i.test(l)) {
       // A file (image, pdf, xml...): just check it exists.
-      if (!fs.existsSync(path.join(DIST, decodeURIComponent(l)))) fail(url, `broken link to file ${l}`);
+      if (!fs.existsSync(path.join(DIST, decodeURIComponent(l))) && !redirected(l)) fail(url, `broken link to file ${l}`);
       continue;
     }
     const clean = l.replace(/(index)?\.html$/i, "");
     const target = clean.endsWith("/") ? clean : clean + "/";
-    if (!built.has(target)) fail(url, `broken internal link to ${l}`);
-    else if (target !== url) inbound.set(target, inbound.get(target) + 1);
+    if (!built.has(target) && !redirected(target)) fail(url, `broken internal link to ${l}`);
+    else if (target !== url && inbound.has(target)) inbound.set(target, inbound.get(target) + 1);
   }
 }
 
@@ -197,7 +221,7 @@ for (const [url, n] of inbound) {
 
 // ---------- site-level checks ----------
 for (const f of ["robots.txt", "llms.txt", "404.html", "_headers"]) {
-  if (!fs.existsSync(path.join(DIST, f))) (f === "_headers" ? warn : fail)("site", `missing ${f}`);
+  if (!fs.existsSync(path.join(DIST, f))) (["_headers", "llms.txt"].includes(f) ? warn : fail)("site", `missing ${f}`);
 }
 if (!files.some((f) => /sitemap.*\.xml$/.test(f))) fail("site", "missing sitemap");
 for (const f of files) {
@@ -208,7 +232,7 @@ for (const f of files) {
 for (const f of failures) console.log(`FAIL ${f}`);
 for (const w of warnings) console.log(`WARN ${w}`);
 console.log(
-  `\n${pages.length} pages checked: ${failures.length} failure(s), ${warnings.length} warning(s)`,
+  `\n${contentPages.length} pages checked: ${failures.length} failure(s), ${warnings.length} warning(s)`,
 );
 if (!failures.length && !warnings.length) console.log("All SEO checks pass.");
 process.exit(failures.length || (STRICT && warnings.length) ? 1 : 0);
