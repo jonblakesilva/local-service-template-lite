@@ -30,13 +30,15 @@ const schema = {
     longitude: business.lng,
   },
   areaServed: `${business.city}, ${business.state} (${business.serviceRadius})`,
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: String(business.rating),
-    reviewCount: String(business.reviewCount),
-    bestRating: "5",
-    worstRating: "1",
-  },
+  ...(business.showRatingInSchema && {
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: String(business.rating),
+      reviewCount: String(business.reviewCount),
+      bestRating: "5",
+      worstRating: "1",
+    },
+  }),
   ...(business.hours.length > 0 && {
     openingHours: business.hours,
   }),

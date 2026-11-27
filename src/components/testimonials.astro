@@ -105,7 +105,7 @@ const schema = {
 };
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+{business.showRatingInSchema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
 <section class="py-20 lg:py-28 bg-white">
   <div class="max-w-(--breakpoint-xl) mx-auto px-5">

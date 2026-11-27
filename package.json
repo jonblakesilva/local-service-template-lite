@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check-placeholders": "node scripts/check-placeholders.js",
+    "audit": "node scripts/seo-audit.js",
     "images": "node scripts/optimize-images.js"
   },
   "dependencies": {

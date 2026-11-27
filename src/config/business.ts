@@ -67,6 +67,9 @@ export const business = {
   // ── Trust / SEO signals ──
   reviewCount: 200,           // shown in hero and trust bar ("200+ reviews")
   rating: "4.9",              // shown as "Rated 4.9/5"
+  // Put the star rating and reviews into search-engine data (schema)? Leave false until
+  // reviewCount and rating above are your REAL Google numbers. Fake ratings in schema can get a site penalized.
+  showRatingInSchema: false,
   priceRange: "$$",           // search-engine price hint: "$" cheap, "$$" typical, "$$$" premium, "$$$$" high end
   guaranteeText: "100% Satisfaction Guaranteed",
   // Short claims shown under the main buttons (separated by dots). Only list what is TRUE for you.
@@ -79,6 +82,15 @@ export const business = {
     yearsInBusiness:  15,    // override or calculate from yearFounded
     satisfactionRate: 98,    // percentage
     citiesServed:     12,    // number of cities/towns in service area
+  },
+
+  // ── Optional pages ──
+  // Switch a page off (false) if the business does not offer it. The page is then not built,
+  // its footer link disappears and it stays out of the sitemap. Content: src/optional-pages/.
+  optionalPages: {
+    emergency: true,   // /emergency: promises fast, after-hours response. Only if they really do it.
+    offers: true,      // /offers: current deals and discounts. Edit the offers first.
+    financing: true,   // /financing: payment plans. Only if they offer financing through a real lender.
   },
 
   // ── Services (short list for footer quick-links) ──

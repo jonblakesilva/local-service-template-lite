@@ -14,7 +14,10 @@ const companyLinks = [
   { title: "About Us",      path: "/about" },
   { title: "Gallery",       path: "/gallery" },
   { title: "Proof",         path: "/proof" },
-  { title: "Financing",     path: "/financing" },
+  // Optional pages only show when switched on in optionalPages in business.ts.
+  ...(business.optionalPages.financing ? [{ title: "Financing", path: "/financing" }] : []),
+  ...(business.optionalPages.emergency ? [{ title: "Emergency Service", path: "/emergency" }] : []),
+  ...(business.optionalPages.offers ? [{ title: "Special Offers", path: "/offers" }] : []),
   { title: "Free Tools",    path: "/tools" },
   { title: "Blog",          path: "/blog" },
   { title: "Contact",       path: "/contact" },
@@ -61,7 +64,7 @@ const companyLinks = [
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
             {business.city}, {business.state} {business.zip}<br/>
-            <span class="text-white/40 text-xs">{business.serviceRadius}</span>
+            <span class="text-white/60 text-xs">{business.serviceRadius}</span>
           </div>
         </div>
 
@@ -92,7 +95,7 @@ const companyLinks = [
 
       <!-- Col 2: Company links -->
       <div>
-        <h3 class="font-heading font-bold text-sm uppercase tracking-widest text-white/40 mb-5">Company</h3>
+        <h3 class="font-heading font-bold text-sm uppercase tracking-widest text-white/60 mb-5">Company</h3>
         <ul class="space-y-2.5">
           {companyLinks.map((link) => (
             <li>
@@ -106,7 +109,7 @@ const companyLinks = [
 
       <!-- Col 3: Services -->
       <div>
-        <h3 class="font-heading font-bold text-sm uppercase tracking-widest text-white/40 mb-5">Services</h3>
+        <h3 class="font-heading font-bold text-sm uppercase tracking-widest text-white/60 mb-5">Services</h3>
         <ul class="space-y-2.5">
           {services.map((service) => (
             <li>
@@ -125,7 +128,7 @@ const companyLinks = [
 
       <!-- Col 4: Service Areas -->
       <div>
-        <h3 class="font-heading font-bold text-sm uppercase tracking-widest text-white/40 mb-5">Service Areas</h3>
+        <h3 class="font-heading font-bold text-sm uppercase tracking-widest text-white/60 mb-5">Service Areas</h3>
         <ul class="space-y-2.5">
           {locations.map((location) => (
             <li>
@@ -144,7 +147,7 @@ const companyLinks = [
         <!-- License badge -->
         {business.licenseNumber && (
           <div class="mt-8 p-3 bg-white/5 rounded-lg border border-white/10">
-            <p class="text-white/40 text-xs">Licensed & Insured</p>
+            <p class="text-white/60 text-xs">Licensed</p>
             <p class="text-white/70 text-xs font-mono mt-0.5">Lic # {business.licenseNumber}</p>
           </div>
         )}
@@ -155,15 +158,15 @@ const companyLinks = [
   <!-- Bottom bar -->
   <div class="border-t border-white/10">
     <div class="max-w-(--breakpoint-xl) mx-auto px-5 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <p class="text-white/40 text-xs">
+      <p class="text-white/60 text-xs">
         © {year} {business.name}. All rights reserved.
       </p>
       <div class="flex gap-5">
-        <a href="/privacy" class="text-white/40 hover:text-white/70 text-xs transition-colors">Privacy Policy</a>
-        <a href="/terms" class="text-white/40 hover:text-white/70 text-xs transition-colors">Terms of Service</a>
-        <a href="/sitemap-index.xml" class="text-white/40 hover:text-white/70 text-xs transition-colors">Sitemap</a>
+        <a href="/privacy" class="text-white/60 hover:text-white/70 text-xs transition-colors">Privacy Policy</a>
+        <a href="/terms" class="text-white/60 hover:text-white/70 text-xs transition-colors">Terms of Service</a>
+        <a href="/sitemap-index.xml" class="text-white/60 hover:text-white/70 text-xs transition-colors">Sitemap</a>
       </div>
-      <a href="https://theleadventure.com" target="_blank" rel="noopener noreferrer" class="text-white/30 hover:text-white/60 text-xs transition-colors">
+      <a href="https://theleadventure.com" target="_blank" rel="noopener noreferrer" class="text-white/60 hover:text-white/60 text-xs transition-colors">
         Built by The Lead Venture
       </a>
     </div>

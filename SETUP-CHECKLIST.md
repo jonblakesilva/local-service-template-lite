@@ -149,6 +149,9 @@ Each of these pages contains `// CUSTOMIZE` or `<!-- CUSTOMIZE -->` comments. Re
 
 - [ ] Run `npm run build` and confirm zero errors or type-check warnings
 - [ ] Run `npm run check-placeholders` against the build output and confirm zero matches
+- [ ] Run `npm run audit` and fix every FAIL line
+- [ ] Set `showRatingInSchema: true` in `business.ts` only if `rating` and `reviewCount` are your real Google numbers
+- [ ] In `optionalPages` in `business.ts`, switch off `emergency`, `offers` or `financing` if the business does not offer it
 - [ ] Manually click every navbar and footer link on the built site in `dist/` to catch any broken links or missing pages
 - [ ] View-source at least 3–4 pages and confirm canonical tags point to the correct production domain
 - [ ] Confirm the Google Maps embeds load (requires `PUBLIC_GOOGLE_MAPS_KEY` to be set)

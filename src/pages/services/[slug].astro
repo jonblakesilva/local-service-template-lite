@@ -141,7 +141,7 @@ const faqItems = [
             </div>
             <p class="text-sm text-neutral-500 mt-3">
               We serve {business.city} and surrounding communities.{" "}
-              <a href="/service-areas" class="text-accent-600 hover:underline">View all service areas →</a>
+              <a href="/service-areas" class="text-accent-700 underline underline-offset-2 hover:no-underline">View all service areas →</a>
             </p>
           </div>
         )}
@@ -198,9 +198,9 @@ const faqItems = [
                 <li>
                   <a
                     href={`/services/${s.data.urlSlug}`}
-                    class="flex items-center gap-2.5 text-sm text-neutral-700 hover:text-accent-600 transition-colors py-1"
+                    class="flex items-center gap-2.5 text-sm text-neutral-700 hover:text-accent-700 transition-colors py-1"
                   >
-                    {s.data.icon && <Icon name={s.data.icon} class="w-4 h-4 text-neutral-400" />}
+                    {s.data.icon && <Icon name={s.data.icon} class="w-4 h-4 text-neutral-500" />}
                     {s.data.title}
                   </a>
                 </li>
