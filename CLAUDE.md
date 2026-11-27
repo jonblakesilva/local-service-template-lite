@@ -12,6 +12,7 @@ The owner may not be technical. Explain what you changed in plain English.
   - **Option B, `"embed"`:** the owner pastes an embed code from their own form tool or CRM into `contactEmbed`. The home hero quote form uses the `PUBLIC_GHL_WEBHOOK_URL` webhook in this mode.
   - Unconfigured forms show a "Call us" box live and a "Form not set up yet" box in dev, never a broken form. SMS consent text must never include "Reply STOP". Details: `SETUP-FORMS.md`.
 - `src/content/services/*.md`, `src/content/locations/*.md`, `src/content/blog/*.md`: service pages, service-area pages and blog posts.
+- Optional pages `/emergency`, `/offers` and `/financing`: switch each on or off with `optionalPages` in `business.ts`. Off means the page is not built and its footer link disappears. Content lives in `src/optional-pages/`.
 - `src/styles/global.css`: colors (`--color-primary-*`, `--color-accent-*`) and fonts.
 - Full list of settings: `SETUP-CHECKLIST.md`. Launch steps: `LAUNCH-CHECKLIST.md`.
 - Call tracking: if `phone` is a tracking number, put the real main line in `schemaPhone` (used for search-engine data).
@@ -22,6 +23,7 @@ The owner may not be technical. Explain what you changed in plain English.
 - `npm run dev`: preview at http://localhost:4321.
 - `npm run build`: build the site into `dist/`.
 - `npm run check-placeholders`: run after a build. Lists any template text still on the pages. Must be clean before launch.
+- `npm run audit`: run after a build. Checks every page for SEO basics (one h1, title and description length, canonical, alt text, image sizes, broken internal links, orphan pages, schema). FAIL lines must be fixed before launch.
 - `npm run images -- <photo-folder>`: converts JPG/PNG photos to WebP into `public/images/`.
 
 ## Conventions
@@ -34,6 +36,7 @@ The owner may not be technical. Explain what you changed in plain English.
 - Mobile first. Check every change at phone width.
 - Every page has one clear call to action plus a phone link. Do not stack several competing buttons.
 - Only show claims the business owner has said are true (licensed, insured, guarantees, review counts).
+- Star ratings only go into schema when `showRatingInSchema: true` in `business.ts`. Turn it on only once `rating` and `reviewCount` are the real Google numbers.
 - Keep business details in `business.ts`, not hard-coded in pages.
 
 ## Page notes

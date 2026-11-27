@@ -130,7 +130,7 @@ const faqs = [
   </section>
 
   <!-- Trust bar -->
-  <div class="bg-accent-500 text-white py-4">
+  <div class="bg-accent-700 text-white py-4">
     <div class="max-w-(--breakpoint-xl) mx-auto px-5">
       <div class="flex flex-wrap items-center justify-center gap-8 text-sm font-semibold">
         <span>Fast Approval, Minutes, Not Days</span>
@@ -164,7 +164,7 @@ const faqs = [
           >
             {opt.badge && (
               <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span class="bg-accent-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide">
+                <span class="bg-accent-700 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide">
                   {opt.badge}
                 </span>
               </div>
@@ -196,13 +196,13 @@ const faqs = [
                   : "border-2 border-primary-800 text-primary-800 hover:bg-primary-50",
               ]}
             >
-              Learn More
+              Ask About {opt.title}
             </a>
           </div>
         ))}
       </div>
 
-      <p class="text-center text-neutral-400 text-xs mt-8" data-aos="fade-up">
+      <p class="text-center text-neutral-500 text-xs mt-8" data-aos="fade-up">
         Financing is subject to credit approval. Terms and availability may vary.
         <!-- CUSTOMIZE: Add your lender name/disclosure here -->
       </p>
@@ -238,7 +238,7 @@ const faqs = [
         <h2 class="font-heading text-3xl lg:text-4xl font-bold text-primary-900">Financing Questions</h2>
         <p class="text-neutral-500 text-lg mt-3">
           Still have questions? Call us at{" "}
-          <a href={`tel:${business.phoneRaw}`} class="text-accent-600 font-semibold hover:underline">{business.phone}</a>.
+          <a href={`tel:${business.phoneRaw}`} class="text-accent-700 font-semibold hover:underline">{business.phone}</a>.
         </p>
       </div>
       <div data-aos="fade-up" data-aos-delay="100">

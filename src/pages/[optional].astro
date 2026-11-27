@@ -1,0 +1,22 @@
+---
+// Optional pages: /emergency, /offers and /financing.
+// Each one is only built when it is switched on in `optionalPages` in src/config/business.ts.
+// Switched off, the page does not exist, its footer link disappears, and it stays out of the sitemap.
+// The page content lives in src/optional-pages/.
+import { business } from "@/config/business";
+import Emergency from "@/optional-pages/Emergency.astro";
+import Offers from "@/optional-pages/Offers.astro";
+import Financing from "@/optional-pages/Financing.astro";
+
+export function getStaticPaths() {
+  return (["emergency", "offers", "financing"] as const)
+    .filter((slug) => business.optionalPages[slug])
+    .map((slug) => ({ params: { optional: slug } }));
+}
+
+const { optional } = Astro.params;
+---
+
+{optional === "emergency" && <Emergency />}
+{optional === "offers" && <Offers />}
+{optional === "financing" && <Financing />}

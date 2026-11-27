@@ -24,10 +24,10 @@ const formattedDate = entry.data.publishDate.toLocaleDateString("en-US", {
   day: "numeric",
 });
 
-const serviceLinks = business.primaryServices.map((name) => ({
-  label: name,
-  href: `/services/${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-}));
+// Link to the service pages that actually exist (src/content/services), so the sidebar never 404s.
+const serviceLinks = (await getCollection("services", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((s) => ({ label: s.data.title, href: `/services/${s.data.urlSlug}/` }));
 ---
 
 <Layout title={entry.data.title} description={entry.data.snippet}>
@@ -85,7 +85,7 @@ const serviceLinks = business.primaryServices.map((name) => ({
         {entry.data.tldr && entry.data.tldr.length > 0 && (
           <div class="not-prose bg-primary-50 border-l-4 border-accent-500 rounded-xl p-6 mb-8">
             <div class="flex items-center gap-2 mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-accent-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-accent-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
               <span class="font-heading font-bold text-primary-900 text-sm uppercase tracking-wide">Quick Summary</span>
@@ -107,7 +107,7 @@ const serviceLinks = business.primaryServices.map((name) => ({
         <nav id="toc-container" class="not-prose hidden bg-neutral-50 border border-neutral-200 rounded-xl p-5 mb-8" aria-label="Table of contents">
           <button id="toc-toggle" class="flex items-center justify-between w-full text-left" aria-expanded="true">
             <span class="font-heading font-bold text-primary-900 text-sm uppercase tracking-wide">In this article</span>
-            <svg id="toc-chevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-neutral-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg id="toc-chevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-neutral-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
@@ -117,7 +117,7 @@ const serviceLinks = business.primaryServices.map((name) => ({
         <!-- Content -->
         <div
           id="article-body"
-          class="prose prose-neutral max-w-none prose-headings:font-heading prose-headings:text-primary-900 prose-a:text-accent-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-primary-900 prose-li:text-neutral-700 prose-p:text-neutral-700 prose-p:leading-relaxed"
+          class="prose prose-neutral max-w-none prose-headings:font-heading prose-headings:text-primary-900 prose-a:text-accent-700 prose-a:underline prose-a:underline-offset-2 prose-strong:text-primary-900 prose-li:text-neutral-700 prose-p:text-neutral-700 prose-p:leading-relaxed"
         >
           <Content />
         </div>
@@ -192,7 +192,7 @@ const serviceLinks = business.primaryServices.map((name) => ({
             <ul class="space-y-1.5">
               {serviceLinks.map(({ label, href }) => (
                 <li>
-                  <a href={href} class="text-sm text-neutral-600 hover:text-accent-600 transition-colors">
+                  <a href={href} class="text-sm text-neutral-600 hover:text-accent-700 transition-colors">
                     {label}
                   </a>
                 </li>
@@ -239,7 +239,7 @@ const serviceLinks = business.primaryServices.map((name) => ({
         const a = document.createElement("a");
         a.href = `#${id}`;
         a.textContent = h.textContent ?? "";
-        a.className = "text-sm text-neutral-600 hover:text-accent-600 transition-colors leading-snug block py-0.5";
+        a.className = "text-sm text-neutral-600 hover:text-accent-700 transition-colors leading-snug block py-0.5";
         li.appendChild(a);
         tocList.appendChild(li);
       });
